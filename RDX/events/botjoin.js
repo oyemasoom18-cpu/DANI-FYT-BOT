@@ -6,7 +6,7 @@ module.exports = {
         credits: "SARDAR RDX",
         name: "botjoin",
         eventType: ["log:subscribe"],
-        description: "Set bot nickname and send welcome when bot is added to group"
+        description: "Send welcome when bot is added to group"
     },
 
     async run({ api, event, Threads, config, send }) {
@@ -21,25 +21,26 @@ module.exports = {
             if (wasAdded) {
                 // Bot was added to this group
                 try {
-                    // Set bot's nickname in the group if configured
-                    const settings = Threads.getSettings(threadID);
-                    const botNickname = settings?.botNickname || config.BOTNICKNAME || "Assistant";
-
-                    try {
-                        await api.changeNickname(botNickname, threadID, botID);
-                    } catch (e) {
-                        console.log('Could not set bot nickname:', e.message);
-                    }
+                    // NOTE: Bot nickname setting is disabled by default
+                    // If you want to set nickname when bot joins, enable it in config
+                    // const settings = Threads.getSettings(threadID);
+                    // const botNickname = settings?.botNickname || config.BOTNICKNAME || "Assistant";
+                    // 
+                    // try {
+                    //     await api.changeNickname(botNickname, threadID, botID);
+                    // } catch (e) {
+                    //     console.log('Could not set bot nickname:', e.message);
+                    // }
 
                     // Send welcome message
                     const welcomeMsg = `╔════════════════════════════╗
 ║   🎉 WELCOME TO GROUP!    
 ╠════════════════════════════╣
 ║ 👋 Hello Everyone!
-║ 
+
 ║ I'm ${config.BOTNAME || 'RDX Bot'}
 ║ I'm now your group assistant
-║ 
+
 ║ Use .help for commands
 ╚════════════════════════════╝`;
 

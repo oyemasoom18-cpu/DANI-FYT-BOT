@@ -121,9 +121,17 @@ module.exports = {
             const cacheDir = path.join(__dirname, '../cache/lockgroup');
             fs.ensureDirSync(cacheDir);
 
+            // Delete old cached image if exists
+            const oldImagePath = path.join(cacheDir, `${threadID}_image.jpg`);
+            if (fs.existsSync(oldImagePath)) {
+              fs.removeSync(oldImagePath);
+              console.log(`[LOCKGROUP] Old cached image deleted for thread ${threadID}`);
+            }
+
             const imagePath = path.join(cacheDir, `${threadID}_image.jpg`);
             const response = await axios.get(imageUrl, { responseType: 'arraybuffer' });
             fs.writeFileSync(imagePath, Buffer.from(response.data));
+            console.log(`[LOCKGROUP] New image saved to cache: ${imagePath}`);
 
             Threads.setSettings(threadID, {
               lockImage: true,
@@ -142,12 +150,18 @@ module.exports = {
           return send.reply('❌ No group image found to lock.');
         }
       } else {
+        // Delete the cached image file when turning off lock
+        const cacheImagePath = path.join(__dirname, '../cache/lockgroup', `${threadID}_image.jpg`);
+        if (fs.existsSync(cacheImagePath)) {
+          fs.removeSync(cacheImagePath);
+        }
         Threads.setSettings(threadID, {
           lockImage: false,
           originalImagePath: null
         });
         return send.reply(`╔════════════════════════════╗
 ║      ❌ IMAGE LOCK DISABLED    
+║   Cache file has been deleted
 ╚════════════════════════════╝`);
       }
     }

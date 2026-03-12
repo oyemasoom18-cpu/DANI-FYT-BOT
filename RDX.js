@@ -11,7 +11,7 @@ const { loadCommands, loadEvents } = require('./Data/system/handle/handleRefresh
 const UsersController = require('./Data/system/controllers/users');
 const ThreadsController = require('./Data/system/controllers/threads');
 const CurrenciesController = require('./Data/system/controllers/currencies');
-const islamicScheduler = require('./RDX/commands/scheduler/islamic_scheduler');
+// const islamicScheduler = require('./RDX/commands/scheduler/islamic_scheduler');
 const { ensureRDXConnection } = require('./Data/system/handle/handleNPM');
 
 const configPath = path.join(__dirname, 'config.json');
@@ -264,9 +264,9 @@ function setupSchedulers() {
     stopSchedulers();
 
     // Initialize Islamic Scheduler (Quran + Namaz)
-    if (api && global.config) {
-        islamicScheduler.initIslamicScheduler(api, global.config);
-    }
+    // if (api && global.config) {
+    //     islamicScheduler.initIslamicScheduler(api, global.config);
+    // }
 
     // Auto Clear Cache every 6 hours
     const cacheTask = cron.schedule('0 */6 * * *', () => {
